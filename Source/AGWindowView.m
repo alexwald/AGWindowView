@@ -444,22 +444,31 @@ CGFloat UIInterfaceOrientationAngleBetween(UIInterfaceOrientation o1, UIInterfac
 
 CGFloat UIInterfaceOrientationAngleOfOrientation(UIInterfaceOrientation orientation)
 {
+    // no transforms applied to window in iOS 8
+    BOOL ignoreOrientation = [[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)];
+ 
     CGFloat angle;
     
-    switch (orientation)
+    if (ignoreOrientation) {
+        angle = 0.0;
+    }
+    else
     {
-        case UIInterfaceOrientationPortraitUpsideDown:
-            angle = M_PI;
-            break;
-        case UIInterfaceOrientationLandscapeLeft:
-            angle = -M_PI_2;
-            break;
-        case UIInterfaceOrientationLandscapeRight:
-            angle = M_PI_2;
-            break;
-        default:
-            angle = 0.0;
-            break;
+        switch (orientation)
+        {
+            case UIInterfaceOrientationPortraitUpsideDown:
+                angle = M_PI;
+                break;
+            case UIInterfaceOrientationLandscapeLeft:
+                angle = -M_PI_2;
+                break;
+            case UIInterfaceOrientationLandscapeRight:
+                angle = M_PI_2;
+                break;
+            default:
+                angle = 0.0;
+                break;
+        }
     }
     
     return angle;
